@@ -99,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |      |   #  |   /  |   {  |   }  |   !  |   ?  |   -  |   +  |   *  |   &  |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |   ~  |   _  |   :  |   =  |   ^  |   $  |   "  |   '  |   \  |   `  |      |
+    * |      |   ~  |   _  |   :  |   =  |   $  |   ^  |   "  |   '  |   \  |   `  |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |      |      |      |      |      |      |      |      | Home | PgDn | PgUp | End  |
     * `-----------------------------------------------------------------------------------'
@@ -107,7 +107,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_LOWER] = LAYOUT_planck_grid(
         _______, XXXXXXX, SE_PIPE, SE_LBRC, SE_RBRC, XXXXXXX, XXXXXXX, SE_LABK, SE_RABK, SE_AT,   SE_PERC, XXXXXXX,
         _______, SE_HASH, SE_SLSH, SE_LCBR, SE_RCBR, SE_EXLM, SE_QUES, SE_MINS, SE_PLUS, SE_ASTR, SE_AMPR, XXXXXXX,
-        _______, SE_TILD, SE_UNDS, SE_COLN, SE_EQL,  SE_CIRC, SE_DLR,  SE_DQUO, SE_QUOT, SE_BSLS, SE_GRV,  _______ ,
+        _______, SE_TILD, SE_UNDS, SE_COLN, SE_EQL,  SE_DLR,  SE_CIRC, SE_DQUO, SE_QUOT, SE_BSLS, SE_GRV,  _______ ,
         _______, _______, _______, _______, _______, _______, KC_BSPC, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END
     ),
 
@@ -131,7 +131,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* FUNCTION
     * ,-----------------------------------------------------------------------------------.
-    * |      |      |      |      |      |      |      |  M4  |  M1  |  M2  |  M5  |MODIFY|
+    * |      |  M4  |  M1  |  M2  |  M5  |      |      |  M4  |  M1  |  M2  |  M5  |MODIFY|
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |  Ins |  F13 |  F14 |  F15 |  F16 |  F17 |  F18 | Left | Down |  Up  | Right|      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -141,8 +141,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_FUNCTION] = LAYOUT_planck_grid(
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN4, KC_BTN1, KC_BTN2, KC_BTN5, MODIFY,
-        KC_INS,  KC_F13,  KC_F14,  KC_F15,  KC_F16,  KC_F17,  KC_F18,  KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX,
+        _______, KC_BTN4, KC_BTN1, KC_BTN2, KC_BTN5, XXXXXXX, XXXXXXX, KC_BTN4, KC_BTN1, KC_BTN2, KC_BTN5, MODIFY,
+        _______,  KC_F13,  KC_F14,  KC_F15,  KC_F16,  KC_F17,  KC_F18,  KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX,
         _______, KC_F19,  KC_F20,  KC_F21,  KC_F22,  KC_F23,  KC_F24,  XXXXXXX, KC_WH_D, KC_WH_U, XXXXXXX, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
