@@ -7,20 +7,16 @@
 // Home row modifiers
 #define HOME_MODS
 
-// Probably not necessary
 #define PREVENT_STUCK_MODIFIERS
-
 // Fixes dual function key timings
 #define TAPPING_FORCE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT_PER_KEY
-#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define PERMISSIVE_HOLD
 
 #define TAPPING_TERM 200
 
 #ifdef LEADER_ENABLE
     #define LEADER_TIMEOUT 250
-    #define LEADER_PER_KEY_TIMING
 #endif
 
 #ifdef MOUSEKEY_ENABLE
@@ -30,12 +26,6 @@
     #define MOUSEKEY_MOVE_DELTA 4
     #define MOUSEKEY_INITIAL_SPEED 2
     #define MOUSEKEY_BASE_SPEED 1000
-#endif
-
-#ifdef AUTO_SHIFT_ENABLE
-    #define AUTO_SHIFT_NO_AUTO_REPEAT
-    #define AUTO_SHIFT_TIMEOUT 125
-    #define NO_AUTO_SHIFT_SPECIAL
 #endif
 
 #ifdef AUDIO_ENABLE

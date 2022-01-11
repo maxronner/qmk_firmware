@@ -3,7 +3,7 @@
 #   the appropriate keymap folder that will get included automatically
 #
 LEADER_ENABLE = yes 		# Leader key functionality
-TAP_DANCE_ENABLE = yes 		# Adds support for custom multiple purpose keys based on tapping
+TAP_DANCE_ENABLE = no 		# Adds support for custom multiple purpose keys based on tapping
 KEY_LOCK_ENABLE = no 		# Support for caps-lock like key for all modifiers
 RGBLIGHT_ENABLE = no 		# Enable WS2812 RGB underlight.
 COMMAND_ENABLE = no 		# Commands for debug and configuration

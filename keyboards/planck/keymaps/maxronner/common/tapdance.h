@@ -1,12 +1,3 @@
-// Tap Dance keycodes
-enum td_keycodes {
-    _BSPC,
-    _ESC,
-};
-// Shorthand used for keymap
-#define TD_BSPC TD(_BSPC)
-#define TD_ESC  TD(_ESC)
-
 // Tap dance states
 typedef enum {
     TD_NONE,
@@ -20,11 +11,18 @@ typedef enum {
     TD_TRIPLE_HOLD
 } td_state_t;
 
+// Tap Dance keycodes
+enum td_keycodes {
+    _BSPC,
+    _ESC,
+};
+
+// Shorthand used for keymap
+#define TD_BSPC TD(_BSPC)
+#define TD_ESC  TD(_ESC)
+
 // Create a global instance of the tapdance state type
 static td_state_t td_state;
-
-// // Function to determine the current tapdance state
-// td_state_t cur_dance(qk_tap_dance_state_t *state);
 
 td_state_t cur_dance(qk_tap_dance_state_t *state) {
     if (state->count == 1) {
@@ -48,3 +46,46 @@ td_state_t cur_dance(qk_tap_dance_state_t *state) {
         else return TD_TRIPLE_HOLD;
     } else return TD_UNKNOWN;
 }
+
+// ................................................................... BSPC Tap Dance
+void bspc_tap(qk_tap_dance_state_t *state, void *user_data) {
+    tap_code(KC_BSPC);
+}
+
+void bspc_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->pressed && !state->interrupted) {
+        register_code(KC_LCTL);
+        register_code(KC_BSPC);
+    }
+}
+
+void bspc_reset(qk_tap_dance_state_t *state, void *user_data) {
+    unregister_code(KC_LCTL);
+    unregister_code(KC_BSPC);
+}
+
+// ................................................................... ESC Tap Dance
+void esc_finished(qk_tap_dance_state_t *state, void *user_data) {
+    td_state = cur_dance(state);
+    switch (td_state) {
+        case TD_SINGLE_TAP: register_code(KC_ESC); break;
+        case TD_DOUBLE_HOLD: alt_key(KC_F4); break;
+        case TD_TRIPLE_TAP: register_code(KC_CAPS); break;
+        default: break;
+    }
+}
+
+void esc_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (td_state) {
+        case TD_SINGLE_TAP: unregister_code(KC_ESC); break;
+        case TD_TRIPLE_TAP: unregister_code(KC_CAPS); break;
+        default: break;
+    }
+}
+
+// ...................................................................
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [_BSPC] = ACTION_TAP_DANCE_FN_ADVANCED(bspc_tap, bspc_finished, bspc_reset),
+    [_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, esc_finished, esc_reset),
+};

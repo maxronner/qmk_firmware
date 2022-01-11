@@ -13,15 +13,3 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
 }
-
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case KC_LSPO:
-        case KC_RSPC:
-            // Immediately select the hold action when another key is pressed.
-            return true;
-        default:
-            // Do not select the hold action when another key is pressed.
-            return false;
-    }
-}
