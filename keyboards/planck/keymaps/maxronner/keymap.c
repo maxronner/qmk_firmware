@@ -72,7 +72,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_COLEMAK_DH] = LAYOUT_planck_grid(
         KC_ESC,  KC_Q,     KC_W,     KC_F,     KC_P,   KC_B,    KC_J,    KC_L,    KC_U,    KC_Y,    SE_ARNG, SE_ADIA,
         KC_TAB,  HOME_A,   HOME_R,   HOME_S,   HOME_T, KC_G,    KC_M,    HOME_N,  HOME_E,  HOME_I,  HOME_O,  SE_ODIA,
-        KC_LSPO, KC_Z,     KC_X,     KC_C,     KC_D,   KC_V,    KC_K,    KC_H,    KC_COMM, KC_DOT,  SE_SCLN, KC_RSPC,
+        KC_LSFT, KC_Z,     KC_X,     KC_C,     KC_D,   KC_V,    KC_K,    KC_H,    KC_COMM, KC_DOT,  SE_SCLN, KC_RSFT,
         KC_LEAD, KC_LCTL,  KC_LALT,  KC_LGUI,  LOWER,  KC_SPC,  KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 
@@ -125,7 +125,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
     [_RAISE] = LAYOUT_planck_grid(
         SE_COMM, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    SE_DOT,
-        SE_MINS, GUI_F1,  ALT_F2,  SFT_F3,  CTL_F4,  KC_F5,   KC_F6,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_RCTL,
+        _______, GUI_F1,  ALT_F2,  SFT_F3,  CTL_F4,  KC_F5,   KC_F6,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_RCTL,
         _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_INS,
         _______, _______, _______, _______, _______, _______, _______, _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT
     ),
