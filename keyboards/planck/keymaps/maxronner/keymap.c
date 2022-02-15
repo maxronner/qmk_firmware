@@ -84,13 +84,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |      |   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   ;  |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |      |      |      |      |      |      |      |      |
+    * | CTRL |      |      |      |      |      |      |      |      |      |      |      |
     * `-----------------------------------------------------------------------------------'
     */
     [_QWERTY] = LAYOUT_planck_grid(
-        KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    SE_ARNG,
-        KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    SE_ADIA, SE_ODIA,
-        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    SE_COMM, SE_DOT,  SE_SCLN, KC_RSFT,
+        _______, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    SE_ARNG,
+        _______, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    SE_ADIA, SE_ODIA,
+        _______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    SE_COMM, SE_DOT,  SE_SCLN, _______,
         KC_LCTL, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 
@@ -107,7 +107,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
     [_LOWER] = LAYOUT_planck_grid(
         KC_CAPS, SE_ACUT, SE_PIPE, SE_LBRC, SE_RBRC, SE_HASH, SE_CIRC, SE_LABK, SE_RABK, SE_AT,   SE_PERC, XXXXXXX,
-        _______, SE_PLUS, SE_MINS, SE_LCBR, SE_RCBR, SE_EXLM, SE_QUES, SE_LPRN, SE_RPRN, SE_SLSH, SE_ASTR, XXXXXXX,
+        KC_SLCK, SE_PLUS, SE_MINS, SE_LCBR, SE_RCBR, SE_EXLM, SE_QUES, SE_LPRN, SE_RPRN, SE_SLSH, SE_ASTR, XXXXXXX,
         _______, SE_TILD, SE_UNDS, SE_COLN, SE_EQL,  SE_DLR,  SE_AMPR, SE_DQUO, SE_QUOT, SE_BSLS, SE_GRV,  _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
@@ -116,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * ,-----------------------------------------------------------------------------------.
     * |   ,  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  .   |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  | Left | Down |  Up  | Right| Ctrl |
+    * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  | Left | Down |  Up  | Right| SCRL |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 | Home | PgDn | PgUp | End  | Ins  |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -125,7 +125,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
     [_RAISE] = LAYOUT_planck_grid(
         SE_COMM, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    SE_DOT,
-        _______, GUI_F1,  ALT_F2,  SFT_F3,  CTL_F4,  KC_F5,   KC_F6,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_RCTL,
+        _______, GUI_F1,  ALT_F2,  SFT_F3,  CTL_F4,  KC_F5,   KC_F6,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, XXXXXXX,
         _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_INS,
         _______, _______, _______, _______, _______, _______, _______, _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT
     ),
@@ -134,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * ,-----------------------------------------------------------------------------------.
     * |      |  M4  |  M1  |  M2  |  M5  |      |      |  M4  |  M1  |  M2  |  M5  |MODIFY|
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |  F13 |  F14 |  F15 |  F16 |  F17 |  F18 | Left | Down |  Up  | Right|      |
+    * |      |  F13 |  F14 |  F15 |  F16 |  F17 |  F18 |MLeft |MDown | MUp  |MRight|      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |      |  F19 |  F20 |  F21 |  F22 |  F23 |  F24 |      | WH D | WH U |      |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
