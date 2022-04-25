@@ -1,13 +1,8 @@
 #pragma once
 
-// Space Cadet for Swedish layout
-#define LSPO_KEYS KC_LSFT, KC_LSFT, KC_8 
-#define RSPC_KEYS KC_RSFT, KC_RSFT, KC_9 
-
-// Home row modifiers
 #define HOME_MODS
-
 #define PREVENT_STUCK_MODIFIERS
+
 // Fixes dual function key timings
 #define TAPPING_FORCE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT_PER_KEY
@@ -29,7 +24,7 @@
 #endif
 
 #ifdef AUDIO_ENABLE
-    #define STARTUP_SONG SONG(NO_SOUND)
+    #define STARTUP_SONG SONG(MARIO_MUSHROOM)
     #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), \
                                   SONG(COLEMAK_SOUND), \
                                 }

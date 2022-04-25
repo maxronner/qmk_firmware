@@ -132,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* FUNCTION
     * ,-----------------------------------------------------------------------------------.
-    * |      |  M4  |  M1  |  M2  |  M5  |      |      |  M4  |  M1  |  M2  |  M5  |MODIFY|
+    * | SLEEP|  M4  |  M1  |  M2  |  M5  |      |      |  M4  |  M1  |  M2  |  M5  |MODIFY|
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |      |  F13 |  F14 |  F15 |  F16 |  F17 |  F18 |MLeft |MDown | MUp  |MRight|      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -142,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_FUNCTION] = LAYOUT_planck_grid(
-        _______, KC_BTN4, KC_BTN1, KC_BTN2, KC_BTN5, XXXXXXX, XXXXXXX, KC_BTN4, KC_BTN1, KC_BTN2, KC_BTN5, MODIFY,
+        KC_SLEP, KC_BTN4, KC_BTN1, KC_BTN2, KC_BTN5, XXXXXXX, XXXXXXX, KC_BTN4, KC_BTN1, KC_BTN2, KC_BTN5, MODIFY,
         _______, KC_F13,  KC_F14,  KC_F15,  KC_F16,  KC_F17,  KC_F18,  KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX,
         _______, KC_F19,  KC_F20,  KC_F21,  KC_F22,  KC_F23,  KC_F24,  XXXXXXX, KC_WH_D, KC_WH_U, XXXXXXX, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
