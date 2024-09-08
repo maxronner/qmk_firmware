@@ -10,3 +10,4 @@ COMMAND_ENABLE = no 		# Commands for debug and configuration
 AUDIO_ENABLE = yes			# Audio output
 NKRO_ENABLE = yes 			# Nkey Rollover - if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
 MOUSEKEY_ENABLE = yes 		# Mouse keys
+DYNAMIC_MACRO_ENABLE = yes

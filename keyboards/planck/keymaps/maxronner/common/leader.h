@@ -11,7 +11,13 @@ void matrix_scan_user(void) {
     }
     SEQ_ONE_KEY(KC_L) {
         ctrl_two_keys(KC_K, KC_C);
-    }    
+    }
+    SEQ_ONE_KEY(KC_B) {
+        set_single_persistent_default_layer(_COLEMAK_DH);
+    }
+    SEQ_ONE_KEY(KC_G) {
+        set_single_persistent_default_layer(_GAMING);
+    } 
     SEQ_ONE_KEY(KC_U) {
         ctrl_two_keys(KC_K, KC_U);
     }
