@@ -18,9 +18,15 @@ enum planck_keycodes {
     QWERTY,
     FAKE_ESC,
     FAKE_ESC_TRIGGER,
+    EXCL_A,
+    EXCL_D,
 };
 
 bool ignore_escape = false;
+bool a_registered = false;
+bool d_registered = false;
+bool a_down = false;
+bool d_down = false;
 
 // Uncomment this for tapdance logic
 // #include "common/tapdance.h"
@@ -52,6 +58,7 @@ bool ignore_escape = false;
     #define HOME_O  KC_O
 #endif
 
+// For cursor selection and movement
 #define GUI_F1  LGUI_T(KC_F1)
 #define ALT_F2  LALT_T(KC_F2)
 #define SFT_F3  LSFT_T(KC_F3)
@@ -109,10 +116,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
 
     [_GAMING] = LAYOUT_planck_grid(
-        FAKE_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_BSPC,
-        KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,   KC_H,    KC_J,   KC_K,    KC_L,    SE_ADIA, KC_ENT,
+        FAKE_ESC,KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_BSPC,
+        KC_TAB,  EXCL_A,  KC_S,    EXCL_D,  KC_F,    KC_G,   KC_H,    KC_J,   KC_K,    KC_L,    SE_ADIA, KC_ENT,
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,   KC_N,    KC_M,   SE_COMM, SE_DOT,  SE_SCLN, KC_RSFT,
-        KC_LCTL, KC_LEAD, KC_LALT, KC_LALT, FPSLOWER,KC_SPC, KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+        KC_LCTL, KC_LCTL, KC_LALT, KC_LALT, FPSLOWER,KC_SPC, KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 
     /* LOWER
@@ -244,6 +251,45 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 ignore_escape = !ignore_escape;
             }
+            return false;
+        case EXCL_A:
+            if (record->event.pressed) {
+                if (d_registered) {
+                    unregister_code(KC_D);
+                }
+                a_down = true;
+                register_code(KC_A);
+                a_registered = true;
+            } else {
+                a_down = false;
+                unregister_code(KC_A);
+                a_registered = false;
+
+                if (d_down) {
+                    register_code(KC_D);
+                    d_registered = true;
+                }
+            }
+            return false;
+        case EXCL_D:
+            if (record->event.pressed) {
+                if (a_registered) {
+                    unregister_code(KC_A);
+                }
+                d_down = true;
+                register_code(KC_D);
+                d_registered = true;
+            } else {
+                d_down = false;
+                unregister_code(KC_D);
+                d_registered = false;
+
+                if (a_down) {
+                    register_code(KC_A);
+                    a_registered = true;
+                }
+            }
+            return false;
     }
     return true;
 }
