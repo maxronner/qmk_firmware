@@ -5,7 +5,7 @@
 
 // Fixes dual function key timings
 #define TAPPING_FORCE_HOLD
-#define IGNORE_MOD_TAP_INTERRUPT_PER_KEY
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define PERMISSIVE_HOLD
 
 #define TAPPING_TERM 200
@@ -31,3 +31,5 @@
     #define CUSTOM_TOGGLE_ON_SOUND E__NOTE(_A6), S__NOTE(_REST), Q__NOTE(_E7),
     #define CUSTOM_TOGGLE_OFF_SOUND E__NOTE(_E7), S__NOTE(_REST), Q__NOTE(_A6),
 #endif
+
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
