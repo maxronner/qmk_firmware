@@ -20,6 +20,7 @@ enum planck_keycodes {
     FAKE_ESC_TRIGGER,
     EXCL_A,
     EXCL_D,
+    TOGGLE_EXCLUSIVITY,
 };
 
 bool ignore_escape = false;
@@ -27,6 +28,10 @@ bool a_registered = false;
 bool d_registered = false;
 bool a_down = false;
 bool d_down = false;
+bool exclusivity_enabled = false;
+
+float on_sound[][2] = SONG(CUSTOM_TOGGLE_ON_SOUND);
+float off_sound[][2] = SONG(CUSTOM_TOGGLE_OFF_SOUND);
 
 // Uncomment this for tapdance logic
 // #include "common/tapdance.h"
@@ -172,7 +177,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FPSLOWER] = LAYOUT_planck_grid(
         KC_1,    KC_2,    _______, KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    MODIFY,
         _______, _______, _______, _______, KC_5,    _______, _______, _______, _______, _______, _______, FAKE_ESC_TRIGGER,
-        _______, KC_9,    KC_8,    KC_7,    KC_6,    KC_0,    _______, _______, _______, _______, _______, _______,
+        _______, KC_9,    KC_8,    KC_7,    KC_6,    KC_0,    _______, _______, _______, _______, _______, TOGGLE_EXCLUSIVITY,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 
@@ -217,6 +222,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #include "common/leader.h"
 #include "common/per_key_config.h"
 
+void custom_toggle_sound(bool state) {
+    if (state) {
+        PLAY_SONG(on_sound);
+    }
+    else {
+        PLAY_SONG(off_sound);
+    }
+}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _FUNCTION);
@@ -250,11 +263,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case FAKE_ESC_TRIGGER:
             if (record->event.pressed) {
                 ignore_escape = !ignore_escape;
+                custom_toggle_sound(ignore_escape);
+            }
+            return false;
+        case TOGGLE_EXCLUSIVITY:
+            if (record->event.pressed) {
+                exclusivity_enabled = !exclusivity_enabled;
+                custom_toggle_sound(exclusivity_enabled);
             }
             return false;
         case EXCL_A:
             if (record->event.pressed) {
-                if (d_registered) {
+                if (exclusivity_enabled && d_registered) {
                     unregister_code(KC_D);
                 }
                 a_down = true;
@@ -265,7 +285,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_A);
                 a_registered = false;
 
-                if (d_down) {
+                if (exclusivity_enabled && d_down) {
                     register_code(KC_D);
                     d_registered = true;
                 }
@@ -273,7 +293,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case EXCL_D:
             if (record->event.pressed) {
-                if (a_registered) {
+                if (exclusivity_enabled && a_registered) {
                     unregister_code(KC_A);
                 }
                 d_down = true;
@@ -284,7 +304,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_D);
                 d_registered = false;
 
-                if (a_down) {
+                if (exclusivity_enabled && a_down) {
                     register_code(KC_A);
                     a_registered = true;
                 }

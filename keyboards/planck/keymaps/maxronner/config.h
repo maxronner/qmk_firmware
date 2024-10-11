@@ -24,8 +24,10 @@
 #endif
 
 #ifdef AUDIO_ENABLE
-    #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), \
-                                  SONG(COLEMAK_SOUND), \
+    #define DEFAULT_LAYER_SONGS { SONG(COLEMAK_SOUND), \
+                                  SONG(QWERTY_SOUND), \
                                   SONG(PLANCK_SOUND), \
                                 }
+    #define CUSTOM_TOGGLE_ON_SOUND E__NOTE(_A6), S__NOTE(_REST), Q__NOTE(_E7),
+    #define CUSTOM_TOGGLE_OFF_SOUND E__NOTE(_E7), S__NOTE(_REST), Q__NOTE(_A6),
 #endif
