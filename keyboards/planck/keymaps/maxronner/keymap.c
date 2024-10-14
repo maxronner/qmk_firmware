@@ -1,11 +1,12 @@
 #include QMK_KEYBOARD_H
 #include "keymap_swedish.h"
 
+
 enum planck_layers {
   _COLEMAK_DH,
   _QWERTY,
   _GAMING,
-  _FPSLOWER,
+  _G_LOWER,
   _LOWER,
   _RAISE,
   _FUNCTION,
@@ -17,7 +18,7 @@ enum planck_keycodes {
     GAMING,
     QWERTY,
     FAKE_ESC,
-    FAKE_ESC_TRIGGER,
+    TOGGLE_FAKE_ESC,
     EXCL_A,
     EXCL_D,
     TOGGLE_EXCLUSIVITY,
@@ -30,17 +31,14 @@ bool a_down = false;
 bool d_down = false;
 bool exclusivity_enabled = false;
 
-float on_sound[][2] = SONG(CUSTOM_TOGGLE_ON_SOUND);
-float off_sound[][2] = SONG(CUSTOM_TOGGLE_OFF_SOUND);
-
-// Uncomment this for tapdance logic
-// #include "common/tapdance.h"
-
-// Layers
+// Layers keycodes
 #define LOWER   LT(_LOWER, KC_ENT)
 #define RAISE   LT(_RAISE, KC_DEL)
 #define MODIFY  OSL(_MODIFY)
-#define FPSLOWER MO(_FPSLOWER)
+#define G_LOWER MO(_G_LOWER)
+
+// Uncomment this for tapdance logic
+// #include "common/tapdance.h"
 
 // Home row mods for Colemak
 #ifdef HOME_MODS
@@ -124,7 +122,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         FAKE_ESC,KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_BSPC,
         _______, EXCL_A,  KC_S,    EXCL_D,  KC_F,    KC_G,   KC_H,    KC_J,   KC_K,    KC_L,    SE_ADIA, KC_ENT,
         _______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,   KC_N,    KC_M,   SE_COMM, SE_DOT,  SE_SCLN, _______,
-        KC_LCTL, _______, _______, KC_LALT, FPSLOWER,KC_SPC, KC_BSPC, RAISE,  _______, _______, _______, _______
+        KC_LCTL, _______, _______, KC_LALT, G_LOWER, KC_SPC, KC_BSPC, RAISE,  _______, _______, _______, _______
     ),
 
     /* LOWER
@@ -163,7 +161,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______, _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT
     ),
 
-    /* FPS-LOWER
+    /* GAMING LOWER
     * ,-----------------------------------------------------------------------------------.
     * |   1  |   2  |      |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | XXXX |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -174,9 +172,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * |      |      |      |      |      |      |      |      |      |      |      |Modify|
     * `-----------------------------------------------------------------------------------'
     */
-    [_FPSLOWER] = LAYOUT_planck_grid(
-        KC_1,    KC_2,    _______, KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    MODIFY,
-        _______, _______, _______, _______, KC_5,    _______, _______, _______, _______, _______, _______, FAKE_ESC_TRIGGER,
+    [_G_LOWER] = LAYOUT_planck_grid(
+        KC_1,    KC_2,    _______, KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    XXXXXXX,
+        _______, _______, _______, _______, KC_5,    _______, _______, _______, _______, _______, _______, TOGGLE_FAKE_ESC,
         _______, KC_9,    KC_8,    KC_7,    KC_6,    KC_0,    _______, _______, _______, _______, _______, TOGGLE_EXCLUSIVITY,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
@@ -218,21 +216,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
+#include "common/audio_config.h"
 #include "common/keycode_functions.h"
 #include "common/leader.h"
 #include "common/per_key_config.h"
+#include "common/caps_word_config.h"
 
-void custom_toggle_sound(bool state) {
-    if (state) {
-        PLAY_SONG(on_sound);
-    }
-    else {
-        PLAY_SONG(off_sound);
-    }
-}
-
+// Tri layer setup
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, _LOWER, _RAISE, _FUNCTION);
+    if ( ( layer_state_cmp(state, _LOWER) && layer_state_cmp(state, _RAISE ) ) || ( layer_state_cmp(state, _RAISE) && layer_state_cmp(state, _G_LOWER) ) ) {
+        return state | (1UL<<_FUNCTION);
+    } else {
+        return state & ~(1UL<<_FUNCTION);
+    }
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -260,7 +256,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_ESC);
             }
             return false;
-        case FAKE_ESC_TRIGGER:
+        case TOGGLE_FAKE_ESC:
             if (record->event.pressed) {
                 ignore_escape = !ignore_escape;
                 custom_toggle_sound(ignore_escape);
@@ -312,28 +308,4 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
     return true;
-}
-
-bool caps_word_press_user(uint16_t keycode) {
-    switch (keycode) {
-        // Keycodes that continue Caps Word, with shift applied.
-        case KC_A ... KC_Z:
-            add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
-            return true;
-
-        // Keycodes that continue Caps Word, without shifting.
-        case KC_1 ... KC_0:
-        case KC_MINS:
-        case KC_BSPC:
-        case KC_DEL:
-        case KC_UNDS:
-        case SE_UNDS:
-        case SE_MINS:
-        case LOWER:
-        case RAISE:
-            return true;
-
-        default:
-            return false;  // Deactivate Caps Word.
-    }
 }
