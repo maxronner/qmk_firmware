@@ -5,7 +5,6 @@
 
 // Fixes dual function key timings
 #define TAPPING_FORCE_HOLD
-#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define PERMISSIVE_HOLD
 
 #define TAPPING_TERM 200

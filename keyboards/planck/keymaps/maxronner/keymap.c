@@ -219,7 +219,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #include "common/audio_config.h"
 #include "common/keycode_functions.h"
 #include "common/leader.h"
-#include "common/per_key_config.h"
 #include "common/caps_word_config.h"
 
 // Tri layer setup
