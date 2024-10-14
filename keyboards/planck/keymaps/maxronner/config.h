@@ -1,7 +1,6 @@
 #pragma once
 
 #define HOME_MODS
-#define PREVENT_STUCK_MODIFIERS
 
 // Fixes dual function key timings
 #define TAPPING_FORCE_HOLD
