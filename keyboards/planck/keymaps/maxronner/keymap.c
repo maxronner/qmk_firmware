@@ -25,8 +25,6 @@ enum planck_keycodes {
 };
 
 bool ignore_escape = false;
-bool a_registered = false;
-bool d_registered = false;
 bool a_down = false;
 bool d_down = false;
 bool exclusivity_enabled = false;
@@ -230,6 +228,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     }
 }
 
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case CLMK_DH:
@@ -268,40 +267,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         case EXCL_A:
+            a_down = record->event.pressed;
             if (record->event.pressed) {
-                if (exclusivity_enabled && d_registered) {
+                if (exclusivity_enabled && d_down) {
                     unregister_code(KC_D);
                 }
-                a_down = true;
                 register_code(KC_A);
-                a_registered = true;
-            } else {
-                a_down = false;
+            } 
+            else {
                 unregister_code(KC_A);
-                a_registered = false;
-
                 if (exclusivity_enabled && d_down) {
                     register_code(KC_D);
-                    d_registered = true;
                 }
             }
             return false;
         case EXCL_D:
+            d_down = record->event.pressed;
             if (record->event.pressed) {
-                if (exclusivity_enabled && a_registered) {
+                if (exclusivity_enabled && a_down) {
                     unregister_code(KC_A);
                 }
-                d_down = true;
                 register_code(KC_D);
-                d_registered = true;
-            } else {
-                d_down = false;
+            } 
+            else {
                 unregister_code(KC_D);
-                d_registered = false;
-
                 if (exclusivity_enabled && a_down) {
                     register_code(KC_A);
-                    a_registered = true;
                 }
             }
             return false;
