@@ -247,11 +247,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         case FAKE_ESC:
-            if (record->event.pressed && !ignore_escape) {
-                register_code(KC_ESC);
+            if (record->event.pressed) {
+                if (!ignore_escape) {
+                    register_code(KC_ESC);
+                }
+                else {
+                    register_code(KC_F13);
+                }
             } 
             else {
-                unregister_code(KC_ESC);
+                if (!ignore_escape) {
+                    unregister_code(KC_ESC);
+                }
+                else {
+                    unregister_code(KC_F13);
+                }
             }
             return false;
         case TOGGLE_FAKE_ESC:
