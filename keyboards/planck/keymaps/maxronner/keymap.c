@@ -6,6 +6,7 @@ enum planck_layers {
   _COLEMAK_DH,
   _QWERTY,
   _GAMING,
+  _GAME_CLMK_DH,
   _G_LOWER,
   _LOWER,
   _RAISE,
@@ -17,6 +18,7 @@ enum planck_keycodes {
     CLMK_DH = SAFE_RANGE,
     GAMING,
     QWERTY,
+    GAME_CLMK_DH,
     FAKE_ESC,
     TOGGLE_FAKE_ESC,
     EXCL_A,
@@ -76,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * | LSFT |   Z  |   X  |   C  |   D  |   V  |   K  |   H  |   ,  |   .  |   ;  | RSFT |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * | LEAD | CTRL | LALT | LGUI |_LOWER|SPACE | BSPC |_RAISE| Left | Down |  Up  |Right |
+    * | LEAD | CTRL | LALT | LGUI | LOWER|SPACE | BSPC | RAISE| Left | Down |  Up  |Right |
     * `-----------------------------------------------------------------------------------'
     */
     [_COLEMAK_DH] = LAYOUT_planck_grid(
@@ -94,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * | LSFT |   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   ;  | RSFT |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * | LEAD | CTRL | LALT | LGUI |_LOWER|SPACE | BSPC |_RAISE| Left | Down |  Up  |Right |
+    * | LEAD | CTRL | LALT | LGUI | LOWER|SPACE | BSPC | RAISE| Left | Down |  Up  |Right |
     * `-----------------------------------------------------------------------------------'
     */
     [_QWERTY] = LAYOUT_planck_grid(
@@ -121,6 +123,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, EXCL_A,  KC_S,    EXCL_D,  KC_F,    KC_G,   KC_H,    KC_J,   KC_K,    KC_L,    SE_ADIA, KC_ENT,
         _______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,   KC_N,    KC_M,   SE_COMM, SE_DOT,  SE_SCLN, _______,
         KC_LCTL, _______, _______, KC_LALT, G_LOWER, KC_SPC, KC_BSPC, RAISE,  _______, _______, _______, _______
+    ),
+
+    /* Gaming Colemak DH
+    * ,-----------------------------------------------------------------------------------.
+    * | ESC  |   Q  |   W  |   F  |   P  |   B  |   J  |   L  |   U  |   Y  |   Å  |      |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | TAB  |   A  |   R  |   S  |   T  |   G  |   M  |   N  |   E  |   I  |   O  |      |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | LSFT |   Z  |   X  |   C  |   D  |   V  |   K  |   H  |   ,  |   .  |   ;  | RSFT |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | CTRL | CTRL | LALT | LALT | NUMS |SPACE | BSPC | RAISE| Left | Down |  Up  |Right |
+    * `-----------------------------------------------------------------------------------'
+    */
+    [_GAME_CLMK_DH] = LAYOUT_planck_grid(
+        FAKE_ESC,KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,   KC_J,    KC_L,  KC_U,    KC_Y,    SE_ARNG, _______,
+        _______, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,   KC_M,    KC_N,  KC_E,    KC_I,    KC_O,    _______,
+        _______, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,   KC_K,    KC_H,  KC_COMM, KC_DOT,  SE_SCLN, KC_ENT,
+        KC_LCTL, _______, _______, KC_LALT, G_LOWER, KC_SPC, KC_BSPC, RAISE, _______, _______, _______, _______
     ),
 
     /* LOWER
@@ -207,7 +227,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_MODIFY] = LAYOUT_planck_grid(
-        QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, CLMK_DH, QWERTY,  GAMING,  XXXXXXX, XXXXXXX,
+        QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, CLMK_DH, QWERTY,  GAMING,  GAME_CLMK_DH, XXXXXXX,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
@@ -244,6 +264,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case GAMING:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_GAMING);
+            }
+            return false;
+        case GAME_CLMK_DH:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_GAME_CLMK_DH);
             }
             return false;
         case FAKE_ESC:
