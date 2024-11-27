@@ -156,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
     [_LOWER] = LAYOUT_planck_grid(
         KC_CAPS, SE_ACUT, SE_PIPE, SE_LBRC, SE_RBRC, SE_HASH, SE_CIRC, SE_LABK, SE_RABK, SE_AT,   SE_PERC, XXXXXXX,
-        KC_SCRL, SE_PLUS, SE_MINS, SE_LCBR, SE_RCBR, SE_EXLM, SE_QUES, SE_LPRN, SE_RPRN, SE_SLSH, SE_ASTR, XXXXXXX,
+        KC_SCRL, SE_PLUS, SE_MINS, SE_LCBR, SE_RCBR, SE_EXLM, SE_QUES, SE_LPRN, SE_RPRN, SE_SLSH, SE_ASTR, KC_PSCR,
         DM_PLY1, SE_TILD, SE_UNDS, SE_COLN, SE_EQL,  SE_DLR,  SE_AMPR, SE_DQUO, SE_QUOT, SE_BSLS, SE_GRV,  DM_PLY2,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
