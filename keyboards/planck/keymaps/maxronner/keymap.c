@@ -1,6 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "keymap_swedish.h"
-
+#include "sendstring_swedish.h"
 
 enum planck_layers {
   _COLEMAK_DH,
@@ -21,12 +21,17 @@ enum planck_keycodes {
     GAME_CLMK_DH,
     FAKE_ESC,
     TOGGLE_FAKE_ESC,
+    L_SWAP_ESC,
+    L_SWAP_LEADER,
     EXCL_A,
     EXCL_D,
     TOGGLE_EXCLUSIVITY,
 };
 
 bool ignore_escape = false;
+
+bool is_leader_swap = false;
+
 bool a_down = false;
 bool d_down = false;
 bool exclusivity_enabled = false;
@@ -82,10 +87,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_COLEMAK_DH] = LAYOUT_planck_grid(
-        KC_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,    KC_J,    KC_L,   KC_U,    KC_Y,    SE_ARNG, SE_ADIA,
+        L_SWAP_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,    KC_J,    KC_L,   KC_U,    KC_Y,    SE_ARNG, SE_ADIA,
         KC_TAB,  HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,    KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  SE_ODIA,
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,    KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, KC_RSFT,
-        QK_LEAD, KC_LCTL, KC_LALT, KC_LGUI, LOWER,  KC_SPC,  KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+        L_SWAP_LEADER, KC_LCTL, KC_LALT, KC_LGUI, LOWER,  KC_SPC,  KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 
     /* Qwerty
@@ -271,13 +276,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 set_single_persistent_default_layer(_GAME_CLMK_DH);
             }
             return false;
+        case L_SWAP_LEADER:
+            if (record->event.pressed && !is_leader_swap) {
+                leader_start();
+            }
+            else if (record->event.pressed && is_leader_swap) {
+                register_code(KC_ESC);
+            }
+            else if (!record->event.pressed && is_leader_swap) {
+                unregister_code(KC_ESC);
+            }
+            return false;
+        case L_SWAP_ESC:
+            if (record->event.pressed && !is_leader_swap) {
+                register_code(KC_ESC);
+            }
+            else if (!record->event.pressed && !is_leader_swap) {
+                unregister_code(KC_ESC);
+            }
+            else if (record->event.pressed && is_leader_swap) {
+                leader_start();
+            }
+            return false;
         case FAKE_ESC:
             if (record->event.pressed) {
                 if (!ignore_escape) {
                     register_code(KC_ESC);
                 }
                 else {
-                    register_code(KC_F13);
+                    register_code(SE_COMM);
                 }
             } 
             else {
@@ -285,7 +312,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code(KC_ESC);
                 }
                 else {
-                    unregister_code(KC_F13);
+                    unregister_code(SE_COMM);
                 }
             }
             return false;
