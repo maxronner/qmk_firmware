@@ -21,8 +21,8 @@ enum planck_keycodes {
     GAME_CLMK_DH,
     FAKE_ESC,
     TOGGLE_FAKE_ESC,
-    L_SWAP_ESC,
-    L_SWAP_LEADER,
+    E_SWAP_ESC,
+    E_SWAP_TAB,
     EXCL_A,
     EXCL_D,
     TOGGLE_EXCLUSIVITY,
@@ -30,20 +30,18 @@ enum planck_keycodes {
 
 bool ignore_escape = false;
 
-bool is_leader_swap = false;
+bool ergo_swap_enabled = false;
 
 bool a_down = false;
 bool d_down = false;
 bool exclusivity_enabled = false;
 
 // Layers keycodes
-#define LOWER   LT(_LOWER, KC_ENT)
+#define LOWER   LT(_LOWER, KC_SPC)
 #define RAISE   LT(_RAISE, KC_DEL)
 #define MODIFY  OSL(_MODIFY)
 #define G_LOWER MO(_G_LOWER)
-
-// Uncomment this for tapdance logic
-// #include "common/tapdance.h"
+#define TD_DM1  ACTION_TAP_DANCE_DOUBLE(DM_PLY1, DM_REC1)
 
 // Home row mods for Colemak
 #ifdef HOME_MODS
@@ -87,10 +85,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_COLEMAK_DH] = LAYOUT_planck_grid(
-        L_SWAP_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,    KC_J,    KC_L,   KC_U,    KC_Y,    SE_ARNG, SE_ADIA,
-        KC_TAB,  HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,    KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  SE_ODIA,
-        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,    KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, KC_RSFT,
-        L_SWAP_LEADER, KC_LCTL, KC_LALT, KC_LGUI, LOWER,  KC_SPC,  KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+        E_SWAP_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,    KC_J,    KC_L,   KC_U,    KC_Y,    XXXXXXX, KC_BSPC,
+        E_SWAP_TAB,  HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,    KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  KC_ENT,
+        KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,    KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, KC_RSFT,
+        QK_LEADER,   SE_ARNG, SE_ADIA, SE_ODIA, LOWER,  KC_SPC,  KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 
     /* Qwerty
@@ -142,9 +140,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_GAME_CLMK_DH] = LAYOUT_planck_grid(
-        FAKE_ESC,KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,   KC_J,    KC_L,  KC_U,    KC_Y,    SE_ARNG, _______,
+        FAKE_ESC,KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,   KC_J,    KC_L,  KC_U,    KC_Y,    SE_ODIA, _______,
         _______, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,   KC_M,    KC_N,  KC_E,    KC_I,    KC_O,    _______,
-        _______, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,   KC_K,    KC_H,  KC_COMM, KC_DOT,  SE_SCLN, KC_ENT,
+        _______, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,   KC_K,    KC_H,  KC_COMM, KC_DOT,  SE_SCLN, _______,
         KC_LCTL, _______, _______, KC_LALT, G_LOWER, KC_SPC, KC_BSPC, RAISE, _______, _______, _______, _______
     ),
 
@@ -188,7 +186,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * ,-----------------------------------------------------------------------------------.
     * |   1  |   2  |      |   3  |   4  |      |      |      |      |   @  |      | XXXX |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * |      |      |      |      |   5  |      |      |      |      |      |      |      | 
+    * |      |      |      |      |   5  |      |      |      |      |      |      |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |      |   9  |   8  |   7  |   6  |      |      |      |      |      |      |      |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -276,26 +274,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 set_single_persistent_default_layer(_GAME_CLMK_DH);
             }
             return false;
-        case L_SWAP_LEADER:
-            if (record->event.pressed && !is_leader_swap) {
-                leader_start();
+        case E_SWAP_TAB:
+            if (record->event.pressed && !ergo_swap_enabled) {
+                register_code(KC_TAB);
             }
-            else if (record->event.pressed && is_leader_swap) {
+            else if (!record->event.pressed && !ergo_swap_enabled) {
+                unregister_code(KC_TAB);
+            }
+            else if (record->event.pressed && ergo_swap_enabled) {
                 register_code(KC_ESC);
             }
-            else if (!record->event.pressed && is_leader_swap) {
+            else if (!record->event.pressed && ergo_swap_enabled) {
                 unregister_code(KC_ESC);
             }
             return false;
-        case L_SWAP_ESC:
-            if (record->event.pressed && !is_leader_swap) {
+        case E_SWAP_ESC:
+            if (record->event.pressed && !ergo_swap_enabled) {
                 register_code(KC_ESC);
             }
-            else if (!record->event.pressed && !is_leader_swap) {
+            else if (!record->event.pressed && !ergo_swap_enabled) {
                 unregister_code(KC_ESC);
             }
-            else if (record->event.pressed && is_leader_swap) {
-                leader_start();
+            else if (record->event.pressed && ergo_swap_enabled) {
+                register_code(KC_TAB);
+            }
+            else if (!record->event.pressed && ergo_swap_enabled) {
+                unregister_code(KC_TAB);
             }
             return false;
         case FAKE_ESC:
@@ -306,7 +310,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 else {
                     register_code(SE_COMM);
                 }
-            } 
+            }
             else {
                 if (!ignore_escape) {
                     unregister_code(KC_ESC);
@@ -335,7 +339,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code(KC_D);
                 }
                 register_code(KC_A);
-            } 
+            }
             else {
                 unregister_code(KC_A);
                 if (exclusivity_enabled && d_down) {
@@ -350,7 +354,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code(KC_A);
                 }
                 register_code(KC_D);
-            } 
+            }
             else {
                 unregister_code(KC_D);
                 if (exclusivity_enabled && a_down) {
