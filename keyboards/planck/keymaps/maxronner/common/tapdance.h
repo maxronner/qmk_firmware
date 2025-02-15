@@ -12,12 +12,10 @@ typedef enum {
 } td_state_t;
 
 // Tap Dance keycodes
-enum td_keycodes {
-    _BSPC,
-    _ESC,
-};
+enum td_keycodes { _DM1, _BSPC };
 
 // Shorthand used for keymap
+#define TD_DM1 TD(_DM1)
 #define TD_BSPC TD(_BSPC)
 #define TD_ESC TD(_ESC)
 
@@ -72,30 +70,27 @@ void bspc_reset(tap_dance_state_t *state, void *user_data) {
 }
 
 // ................................................................... ESC Tap Dance
-void esc_finished(tap_dance_state_t *state, void *user_data) {
+void dm1_finished(tap_dance_state_t *state, void *user_data) {
     td_state = cur_dance(state);
     switch (td_state) {
         case TD_SINGLE_TAP:
-            register_code(KC_ESC);
+            register_code(DM_PLY1);
             break;
-        case TD_DOUBLE_HOLD:
-            alt_key(KC_F4);
-            break;
-        case TD_TRIPLE_TAP:
-            register_code(KC_CAPS);
+        case TD_SINGLE_HOLD:
+            register_code(DM_REC1);
             break;
         default:
             break;
     }
 }
 
-void esc_reset(tap_dance_state_t *state, void *user_data) {
+void dm1_reset(tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case TD_SINGLE_TAP:
-            unregister_code(KC_ESC);
+            unregister_code(DM_PLY1);
             break;
-        case TD_TRIPLE_TAP:
-            unregister_code(KC_CAPS);
+        case TD_SINGLE_HOLD:
+            unregister_code(DM_REC1);
             break;
         default:
             break;
@@ -106,5 +101,5 @@ void esc_reset(tap_dance_state_t *state, void *user_data) {
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [_BSPC] = ACTION_TAP_DANCE_FN_ADVANCED(bspc_tap, bspc_finished, bspc_reset),
-    [_ESC]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL, esc_finished, esc_reset),
+    [_DM1]  = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dm1_finished, dm1_reset),
 };

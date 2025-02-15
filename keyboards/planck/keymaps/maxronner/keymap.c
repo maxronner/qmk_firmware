@@ -2,17 +2,9 @@
 #include "keymap_swedish.h"
 #include "sendstring_swedish.h"
 
-enum planck_layers {
-  _COLEMAK_DH,
-  _QWERTY,
-  _GAMING,
-  _GAME_CLMK_DH,
-  _G_LOWER,
-  _LOWER,
-  _RAISE,
-  _FUNCTION,
-  _MODIFY
-};
+//tap_dance_action_t tap_dance_actions;
+
+enum planck_layers { _COLEMAK_DH, _QWERTY, _GAMING, _GAME_CLMK_DH, _G_LOWER, _LOWER, _RAISE, _FUNCTION, _MODIFY };
 
 enum planck_keycodes {
     CLMK_DH = SAFE_RANGE,
@@ -32,63 +24,66 @@ bool ignore_escape = false;
 
 bool ergo_swap_enabled = false;
 
-bool a_down = false;
-bool d_down = false;
+bool a_down              = false;
+bool d_down              = false;
 bool exclusivity_enabled = false;
 
 // Layers keycodes
-#define LOWER   LT(_LOWER, KC_SPC)
+#define LOWER   MO(_LOWER)
 #define RAISE   LT(_RAISE, KC_DEL)
 #define MODIFY  OSL(_MODIFY)
 #define G_LOWER MO(_G_LOWER)
-#define TD_DM1  ACTION_TAP_DANCE_DOUBLE(DM_PLY1, DM_REC1)
 
 // Home row mods for Colemak
 #ifdef HOME_MODS
-    #define HOME_A LGUI_T(KC_A)
-    #define HOME_R LALT_T(KC_R)
-    #define HOME_S LSFT_T(KC_S)
-    #define HOME_T LCTL_T(KC_T)
-    #define HOME_N RCTL_T(KC_N)
-    #define HOME_E RSFT_T(KC_E)
-    #define HOME_I LALT_T(KC_I)
-    #define HOME_O RGUI_T(KC_O)
+#    define HOME_A LGUI_T(KC_A)
+#    define HOME_R LALT_T(KC_R)
+#    define HOME_S LSFT_T(KC_S)
+#    define HOME_T LCTL_T(KC_T)
+#    define HOME_N RCTL_T(KC_N)
+#    define HOME_E RSFT_T(KC_E)
+#    define HOME_I LALT_T(KC_I)
+#    define HOME_O RGUI_T(KC_O)
 #else
-    #define HOME_A  KC_A
-    #define HOME_R  KC_R
-    #define HOME_S  KC_S
-    #define HOME_T  KC_T
-    #define HOME_N  KC_N
-    #define HOME_E  KC_E
-    #define HOME_I  KC_I
-    #define HOME_O  KC_O
+#    define HOME_A KC_A
+#    define HOME_R KC_R
+#    define HOME_S KC_S
+#    define HOME_T KC_T
+#    define HOME_N KC_N
+#    define HOME_E KC_E
+#    define HOME_I KC_I
+#    define HOME_O KC_O
 #endif
 
 // For cursor selection and movement
-#define GUI_F1  LGUI_T(KC_F1)
-#define ALT_F2  LALT_T(KC_F2)
-#define SFT_F3  LSFT_T(KC_F3)
-#define CTL_F4  LCTL_T(KC_F4)
+#define GUI_F1 LGUI_T(KC_F1)
+#define ALT_F2 LALT_T(KC_F2)
+#define SFT_F3 LSFT_T(KC_F3)
+#define CTL_F4 LCTL_T(KC_F4)
+
+#define CTL_Å LGUI_T(SE_ARNG)
+#define ALT_Ä LGUI_T(SE_ADIA)
+#define GUI_Ö LGUI_T(SE_ODIA)
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Colemak DH
     * ,-----------------------------------------------------------------------------------.
-    * | ESC  |   Q  |   W  |   F  |   P  |   B  |   J  |   L  |   U  |   Y  |   Å  |  Ä   |
+    * | ESC  |   Q  |   W  |   F  |   P  |   B  |   J  |   L  |   U  |   Y  | MP1  | MR1  |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * | TAB  |   A  |   R  |   S  |   T  |   G  |   M  |   N  |   E  |   I  |   O  |  Ö   |
+    * | TAB  |   A  |   R  |   S  |   T  |   G  |   M  |   N  |   E  |   I  |   O  | ENT  |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * | LSFT |   Z  |   X  |   C  |   D  |   V  |   K  |   H  |   ,  |   .  |   ;  | RSFT |
     * |------+------+------+------+------+------+------+------+------+------+------+------|
-    * | LEAD | CTRL | LALT | LGUI | LOWER|SPACE | BSPC | RAISE| Left | Down |  Up  |Right |
+    * | LEAD | CTRL | LALT | LGUI |LOWER |SPACE | BSPC | RAISE| Left | Down |  Up  |Right |
     * `-----------------------------------------------------------------------------------'
     */
     [_COLEMAK_DH] = LAYOUT_planck_grid(
-        E_SWAP_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,    KC_J,    KC_L,   KC_U,    KC_Y,    XXXXXXX, KC_BSPC,
+        E_SWAP_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,    KC_J,    KC_L,   KC_U,    KC_Y,    DM_PLY1, DM_REC1,
         E_SWAP_TAB,  HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,    KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  KC_ENT,
         KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,    KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, KC_RSFT,
-        QK_LEADER,   SE_ARNG, SE_ADIA, SE_ODIA, LOWER,  KC_SPC,  KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+        QK_LEADER,   CTL_Å,   ALT_Ä,   GUI_Ö,   LOWER,  KC_SPC,  KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 
     /* Qwerty
@@ -244,13 +239,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // Tri layer setup
 layer_state_t layer_state_set_user(layer_state_t state) {
-    if ( ( layer_state_cmp(state, _LOWER) && layer_state_cmp(state, _RAISE ) ) || ( layer_state_cmp(state, _RAISE) && layer_state_cmp(state, _G_LOWER) ) ) {
-        return state | (1UL<<_FUNCTION);
+    if ((layer_state_cmp(state, _LOWER) && layer_state_cmp(state, _RAISE)) || (layer_state_cmp(state, _RAISE) && layer_state_cmp(state, _G_LOWER))) {
+        return state | (1UL << _FUNCTION);
     } else {
-        return state & ~(1UL<<_FUNCTION);
+        return state & ~(1UL << _FUNCTION);
     }
 }
-
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -277,28 +271,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case E_SWAP_TAB:
             if (record->event.pressed && !ergo_swap_enabled) {
                 register_code(KC_TAB);
-            }
-            else if (!record->event.pressed && !ergo_swap_enabled) {
+            } else if (!record->event.pressed && !ergo_swap_enabled) {
                 unregister_code(KC_TAB);
-            }
-            else if (record->event.pressed && ergo_swap_enabled) {
+            } else if (record->event.pressed && ergo_swap_enabled) {
                 register_code(KC_ESC);
-            }
-            else if (!record->event.pressed && ergo_swap_enabled) {
+            } else if (!record->event.pressed && ergo_swap_enabled) {
                 unregister_code(KC_ESC);
             }
             return false;
         case E_SWAP_ESC:
             if (record->event.pressed && !ergo_swap_enabled) {
                 register_code(KC_ESC);
-            }
-            else if (!record->event.pressed && !ergo_swap_enabled) {
+            } else if (!record->event.pressed && !ergo_swap_enabled) {
                 unregister_code(KC_ESC);
-            }
-            else if (record->event.pressed && ergo_swap_enabled) {
+            } else if (record->event.pressed && ergo_swap_enabled) {
                 register_code(KC_TAB);
-            }
-            else if (!record->event.pressed && ergo_swap_enabled) {
+            } else if (!record->event.pressed && ergo_swap_enabled) {
                 unregister_code(KC_TAB);
             }
             return false;
@@ -306,16 +294,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 if (!ignore_escape) {
                     register_code(KC_ESC);
-                }
-                else {
+                } else {
                     register_code(SE_COMM);
                 }
-            }
-            else {
+            } else {
                 if (!ignore_escape) {
                     unregister_code(KC_ESC);
-                }
-                else {
+                } else {
                     unregister_code(SE_COMM);
                 }
             }
@@ -339,8 +324,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code(KC_D);
                 }
                 register_code(KC_A);
-            }
-            else {
+            } else {
                 unregister_code(KC_A);
                 if (exclusivity_enabled && d_down) {
                     register_code(KC_D);
@@ -354,12 +338,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code(KC_A);
                 }
                 register_code(KC_D);
-            }
-            else {
+            } else {
                 unregister_code(KC_D);
                 if (exclusivity_enabled && a_down) {
                     register_code(KC_A);
                 }
+            }
+            return false;
+        case LT(0,DM_PLY1):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(C(KC_C)); // Intercept tap function to send Ctrl-C
+            } else if (record->event.pressed) {
+                tap_code16(C(KC_V)); // Intercept hold function to send Ctrl-V
             }
             return false;
     }
