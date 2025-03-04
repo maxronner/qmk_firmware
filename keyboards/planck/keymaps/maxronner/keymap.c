@@ -4,10 +4,11 @@
 
 //tap_dance_action_t tap_dance_actions;
 
-enum planck_layers { _COLEMAK_DH, _QWERTY, _GAMING, _GAME_CLMK_DH, _G_LOWER, _LOWER, _RAISE, _FUNCTION, _MODIFY };
+enum planck_layers { _COLEMAK_DH_SAFE, _COLEMAK_DH, _QWERTY, _GAMING, _GAME_CLMK_DH, _G_LOWER, _LOWER, _RAISE, _FUNCTION, _MODIFY };
 
 enum planck_keycodes {
     CLMK_DH = SAFE_RANGE,
+    CLMK_SF,
     GAMING,
     QWERTY,
     GAME_CLMK_DH,
@@ -29,7 +30,7 @@ bool d_down              = false;
 bool exclusivity_enabled = false;
 
 // Layers keycodes
-#define LOWER   MO(_LOWER)
+#define LOWER   LT(_LOWER, KC_ENT)
 #define RAISE   LT(_RAISE, KC_DEL)
 #define MODIFY  OSL(_MODIFY)
 #define G_LOWER MO(_G_LOWER)
@@ -80,6 +81,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_COLEMAK_DH] = LAYOUT_planck_grid(
+        E_SWAP_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,    KC_J,    KC_L,   KC_U,    KC_Y,    SE_ARNG, SE_ADIA,
+        E_SWAP_TAB,  HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,    KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  SE_ODIA,
+        KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,    KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, KC_RSFT,
+        QK_LEADER,   KC_LCTL, KC_LALT, KC_LGUI, LOWER,  KC_SPC,  KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+    ),
+
+    [_COLEMAK_DH_SAFE] = LAYOUT_planck_grid(
         E_SWAP_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,    KC_J,    KC_L,   KC_U,    KC_Y,    DM_PLY1, DM_REC1,
         E_SWAP_TAB,  HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,    KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  KC_ENT,
         KC_LSFT,     KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,    KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, KC_RSFT,
@@ -225,9 +233,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * `-----------------------------------------------------------------------------------'
     */
     [_MODIFY] = LAYOUT_planck_grid(
-        QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, CLMK_DH, QWERTY,  GAMING,  GAME_CLMK_DH, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+        QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, CLMK_DH, QWERTY,  XXXXXXX,  XXXXXXX, XXXXXXX,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GAME_CLMK_DH, GAMING, XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, CLMK_SF, XXXXXXX, XXXXXXX, XXXXXXX, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 };
@@ -266,6 +274,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case GAME_CLMK_DH:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_GAME_CLMK_DH);
+            }
+            return false;
+        case CLMK_SF:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_COLEMAK_DH_SAFE);
             }
             return false;
         case E_SWAP_TAB:
