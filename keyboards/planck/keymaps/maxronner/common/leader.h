@@ -1,26 +1,10 @@
 void leader_end_user(void) {
-    if (leader_sequence_three_keys(KC_S, KC_W, KC_J)) {
-        // windows: open taskmanager
-        register_code(KC_LSFT);
-        ctrl_key(KC_ESC);
-        unregister_code(KC_LSFT);
-    } else if (leader_sequence_two_keys(KC_E, KC_R)) {
+    if (leader_sequence_two_keys(KC_E, KC_R)) {
         // E(mail) R(onner)
         SEND_STRING("max@ronner.dev");
     } else if (leader_sequence_two_keys(KC_E, KC_G)) {
         // E(mail) G(mail)
         SEND_STRING("max.ronner@gmail.com");
-    } else if (leader_sequence_three_keys(KC_S, KC_L, KC_R)) {
-        // S(ystem) L(inux) R(eboot)
-        alt_key(KC_F2);
-        tap_code(KC_R);
-        tap_code(KC_ENT);
-    } else if (leader_sequence_three_keys(KC_V, KC_C, KC_C)) {
-        // V(isual studio) C(ode) C(omment)
-        ctrl_two_keys(KC_K, KC_C);
-    } else if (leader_sequence_three_keys(KC_V, KC_C, KC_U)) {
-        // V(isual studio) C(ode) U(ncomment)
-        ctrl_two_keys(KC_K, KC_U);
     } else if (leader_sequence_two_keys(KC_K, KC_Q)) {
         // K(eyboard) L(ayer) Q(werty)
         set_single_persistent_default_layer(_QWERTY);
