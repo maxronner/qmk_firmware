@@ -5,7 +5,6 @@
 // tap_dance_action_t tap_dance_actions;
 
 enum planck_layers { 
-    _COLEMAK_DH_SAFE,
     _COLEMAK_DH,
     _QWERTY,
     _GAMING,
@@ -14,6 +13,7 @@ enum planck_layers {
     _LOWER,
     _RAISE,
     _FUNCTION,
+    _GAMING_CHAT,
     _MODIFY
 };
 
@@ -47,6 +47,7 @@ bool exclusivity_enabled = false;
 #define LOWER LT(_LOWER, KC_ENT)
 #define RAISE LT(_RAISE, KC_DEL)
 #define MODIFY OSL(_MODIFY)
+#define G_CHAT TG(_GAMING_CHAT)
 #define G_LOWER MO(_G_LOWER)
 
 // Home row mods for Colemak
@@ -100,12 +101,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         QK_LEADER,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,  KC_SPC, KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 
-    [_COLEMAK_DH_SAFE] = LAYOUT_planck_grid(
-        E_SWAP_ESC, KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,   KC_J,    KC_L,   KC_U,    KC_Y,    DM_PLY1, DM_REC1,
-        E_SWAP_TAB, HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,   KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  KC_ENT,
-        KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,   KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, KC_RSFT,
-        QK_LEADER,  CTL_Å,   ALT_Ä,   GUI_Ö,   LOWER,  KC_SPC, KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
-    ),
     /* Qwerty
      * ,-----------------------------------------------------------------------------------.
      * | ESC  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  |  Å   |
@@ -138,7 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_GAMING] = LAYOUT_planck_grid(
         FAKE_ESC,KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC,
         _______, EXCL_A,  KC_S,    EXCL_D,  KC_F,    KC_G,   KC_H,    KC_J,  KC_K,    KC_L,    SE_ADIA, KC_ENT,
-        _______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,   KC_N,    KC_M,  SE_COMM, SE_DOT,  SE_SCLN, _______,
+        _______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,   KC_N,    KC_M,  SE_COMM, SE_DOT,  SE_SCLN, G_CHAT,
         KC_LCTL, _______, _______, KC_LALT, G_LOWER, KC_SPC, KC_BSPC, RAISE, _______, _______, _______, _______
     ),
     /* Gaming Colemak DH
@@ -240,8 +235,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MODIFY] = LAYOUT_planck_grid(
         QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, CLMK_DH, QWERTY, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GAME_CLMK_DH, GAMING, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, CLMK_SF, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+    ),
+
+    [_GAMING_CHAT] = LAYOUT_planck_grid(
+        E_SWAP_ESC, KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,   KC_J,    KC_L,   KC_U,    KC_Y,    DM_PLY1, DM_REC1,
+        E_SWAP_TAB, HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,   KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  KC_ENT,
+        KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,   KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, G_CHAT,
+        QK_LEADER,  CTL_Å,   ALT_Ä,   GUI_Ö,   LOWER,  KC_SPC, KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 };
 
@@ -250,7 +252,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #include "common/leader.h"
 #include "common/caps_word_config.h"
 
-// Tri layer setup
 layer_state_t layer_state_set_user(layer_state_t state) {
     if ((layer_state_cmp(state, _LOWER) && layer_state_cmp(state, _RAISE)) || (layer_state_cmp(state, _RAISE) && layer_state_cmp(state, _G_LOWER))) {
         return state | (1UL << _FUNCTION);
@@ -279,11 +280,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case GAME_CLMK_DH:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_GAME_CLMK_DH);
-            }
-            return false;
-        case CLMK_SF:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_COLEMAK_DH_SAFE);
             }
             return false;
         case E_SWAP_TAB:
