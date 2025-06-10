@@ -9,11 +9,11 @@ enum planck_layers {
     _QWERTY,
     _GAMING,
     _GAME_CLMK_DH,
+    _GAMING_CHAT,
     _G_LOWER,
     _LOWER,
     _RAISE,
     _FUNCTION,
-    _GAMING_CHAT,
     _MODIFY
 };
 
@@ -76,10 +76,6 @@ bool exclusivity_enabled = false;
 #define ALT_F2 LALT_T(KC_F2)
 #define SFT_F3 LSFT_T(KC_F3)
 #define CTL_F4 LCTL_T(KC_F4)
-
-#define CTL_Å LGUI_T(SE_ARNG)
-#define ALT_Ä LGUI_T(SE_ADIA)
-#define GUI_Ö LGUI_T(SE_ODIA)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -152,6 +148,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,    KC_M,    KC_N,  KC_E,    KC_I,    KC_O,    _______,
         _______, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_K,    KC_H,  KC_COMM, KC_DOT,  SE_SCLN, _______,
         KC_LCTL, _______, _______, KC_LALT, G_LOWER, KC_SPC,  KC_BSPC, RAISE, _______, _______, _______, _______
+    ),
+
+    [_GAMING_CHAT] = LAYOUT_planck_grid(
+        E_SWAP_ESC, KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,   KC_J,    KC_L,   KC_U,    KC_Y,    SE_ARNG, SE_ADIA,
+        E_SWAP_TAB, HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,   KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  SE_ODIA,
+        KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,   KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, G_CHAT,
+        QK_LEADER,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,  KC_SPC, KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
     /* LOWER
      * ,-----------------------------------------------------------------------------------.
@@ -237,13 +240,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GAME_CLMK_DH, GAMING, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-    ),
-
-    [_GAMING_CHAT] = LAYOUT_planck_grid(
-        E_SWAP_ESC, KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,   KC_J,    KC_L,   KC_U,    KC_Y,    DM_PLY1, DM_REC1,
-        E_SWAP_TAB, HOME_A,  HOME_R,  HOME_S,  HOME_T, KC_G,   KC_M,    HOME_N, HOME_E,  HOME_I,  HOME_O,  KC_ENT,
-        KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,   KC_V,   KC_K,    KC_H,   KC_COMM, KC_DOT,  SE_SCLN, G_CHAT,
-        QK_LEADER,  CTL_Å,   ALT_Ä,   GUI_Ö,   LOWER,  KC_SPC, KC_BSPC, RAISE,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 };
 
